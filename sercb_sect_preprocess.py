@@ -269,14 +269,17 @@ def sercb_beam_sect(etabs, rbeam, frm, conc) :
         haveRebar = True
         for j in range(len(db)) :
             jdb = db[j]
-            beam_name = jdb['beam_name']
+            beam_names = jdb['beam_name']
+            beam_story = jdb['beam_story'][0]
+
+            beam_story_names = [beam_story + beam_name for beam_name in beam_names]
             
-            if not sect in beam_name :
+            if not sect in beam_story_names :
                 if j == len(db)-1 :
                     haveRebar = False
                 continue
             else :
-                idx = beam_name.index(sect)
+                idx = beam_story_names.index(sect)
                 
                 rebar = jdb['rebar']
                 stir = jdb['stirrup']
@@ -607,10 +610,10 @@ etx = mat_fix_M0(etx)
 ety = mat_fix_M0(ety)
 print('    01. ETABS讀取成功！(%s.e2k)' % etx.filename)
 
-rbeam = rd.rbeam2016()
+rbeam = rd.rbeam2019()
 print('    02. RCAD梁配筋讀取成功！(tmp-Beam-Rebar.txt)')
 
-rcol = rd.rcol2016()
+rcol = rd.rcol2019()
 print('    03. RCAD柱配筋讀取成功！(tmp-Col-Rebar.txt)')
 
 print('02. 修改ETABS桿件名稱...')
